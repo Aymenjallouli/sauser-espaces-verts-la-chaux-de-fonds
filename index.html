@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sauser espaces verts, paysagiste à La Chaux-de-Fonds</title>
+<meta name="description" content="Paysagiste à La Chaux-de-Fonds : création, aménagement et entretien de jardins dans les Montagnes neuchâteloises et le canton. 079 923 92 54.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CH">
+<meta property="og:title" content="Sauser espaces verts, paysagiste à La Chaux-de-Fonds">
+<meta property="og:description" content="Création, aménagement et entretien de jardins dans les Montagnes neuchâteloises. 5,0 sur Google, 40 avis.">
+<meta name="theme-color" content="#1D3B2A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%231D3B2A'/%3E%3Cpath d='M44 21.5c-2.4-3.3-6.6-5.5-12-5.5-7.2 0-11.6 3.9-11.6 9 0 11.6 23.6 7.3 23.6 17.8 0 4.6-4.4 8.2-11.6 8.2-5.8 0-10.4-2.4-13-6' fill='none' stroke='%23C2DA5F' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400;100..125,600;100..125,800&family=Newsreader:ital,wght@1,400&display=swap">
+<style>
+/* ──────────────────────────────────────────────────────────────────────────
+   SAUSER ESPACES VERTS · design decisions
+   Palette : tirée des photos de chantier. Fond « calcaire » = le gravier clair
+     des accès jurassiens ; encre et marque « épicéa » = les sapins sombres des
+     Montagnes neuchâteloises ; accent « érable au soleil » = le vert acide des
+     feuilles en contre-jour, réservé aux fonds sombres (bouton, étoiles, tags).
+     Le bleu du ciel reste dans les photos, jamais dans l'interface.
+   Typo : Archivo (grotesque à axe de largeur, esprit signalétique suisse) :
+     Expanded 800 pour le nom-affiche, les chiffres et le téléphone ; 600 pour
+     les titres ; 400 pour le texte. Newsreader italique pour la voix des
+     clients et « espaces verts ». La machine et la main.
+   Hero : mobile = photo pleine page (l'allée sous les arbres) + voile épicéa ;
+     desktop = composition éditoriale, nom surdimensionné à gauche, photo
+     verticale cadrée à droite.
+   Rythme : calcaire / surface en alternance, un seul grand aplat épicéa avec
+     courbes de niveau dessinées en SVG (zone d'intervention), pied de page
+     encre. Grilles asymétriques 7/5 et 5/7, une galerie en mosaïque 1 + 4.
+   ────────────────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#F3EFE4; --surface:#FBF9F3; --ink:#15231B; --ink-soft:#4A584F;
+  --brand:#1D3B2A; --brand-deep:#11251A; --brand-ink:#F3EFE4;
+  --accent:#C2DA5F; --line:rgba(21,35,27,.14); --line-light:rgba(243,239,228,.18);
+  --open:#2E8049; --closed:#9A3B26; --focus:#1D3B2A;
+
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+
+  --step--1:clamp(.875rem,.85rem + .12vw,.9375rem);
+  --step-0:clamp(1.0625rem,1.04rem + .1vw,1.125rem);
+  --step-1:clamp(1.1875rem,1.12rem + .35vw,1.375rem);
+  --step-2:clamp(1.4375rem,1.27rem + .8vw,1.875rem);
+  --step-3:clamp(1.75rem,1.45rem + 1.5vw,2.75rem);
+  --step-4:clamp(2.125rem,1.6rem + 2.6vw,3.875rem);
+  --step-5:clamp(3rem,1.9rem + 5.6vw,7.25rem);
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px;
+  --space-6:32px; --space-7:48px; --space-8:64px; --space-9:96px;
+  --section:clamp(56px,10vw,128px);
+  --gutter:clamp(16px,5vw,40px);
+  --max:1200px;
+
+  --r-1:10px; --r-2:18px; --r-3:28px;
+  --shadow-1:0 1px 2px rgba(21,35,27,.06),0 4px 12px -4px rgba(21,35,27,.10);
+  --shadow-2:0 2px 4px rgba(21,35,27,.05),0 18px 40px -14px rgba(21,35,27,.24);
+  --shadow-3:0 6px 14px rgba(21,35,27,.08),0 40px 80px -28px rgba(21,35,27,.42);
+
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --header-h:64px; --bar-h:64px;
+}
+@media (min-width:768px){:root{--bar-h:0px;--header-h:72px}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--ink);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html.no-scroll{overflow:hidden}
+body{margin:0;padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom));font-family:var(--sans);font-size:var(--step-0);line-height:1.6;color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased}
+main{background:var(--bg);display:block}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+button{font:inherit;color:inherit}
+blockquote{margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+[tabindex="-1"]:focus{outline:none}
+.nowrap{white-space:nowrap}
+.visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:var(--space-4);top:var(--space-3);z-index:100;display:inline-flex;align-items:center;min-height:48px;padding:0 var(--space-5);border-radius:999px;background:var(--accent);color:var(--ink);font-weight:600;text-decoration:none;transform:translateY(-200%);transition:transform .3s var(--ease)}
+.skip:focus{transform:none}
+
+.container{width:100%;max-width:calc(var(--max) + 2*var(--gutter));margin-inline:auto;padding-inline:var(--gutter)}
+.section{padding-block:var(--section)}
+section[id]{scroll-margin-top:calc(var(--header-h) + 8px)}
+.eyebrow{display:flex;align-items:center;gap:var(--space-3);font-size:var(--step--1);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.eyebrow::before{content:"";width:28px;height:2px;background:currentColor;flex:none}
+.h2{font-size:var(--step-4);margin-top:var(--space-4)}
+.lead{margin-top:var(--space-5);font-size:var(--step-1);line-height:1.5;color:var(--ink-soft);max-width:44ch}
+.wide{font-stretch:125%;font-weight:800}
+
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.stars{display:block;width:90px;height:18px;flex:none;fill:currentColor}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:1.5px solid transparent;font-weight:600;font-size:var(--step-0);line-height:1.2;text-decoration:none;text-align:center;cursor:pointer;transition:transform .35s var(--ease),opacity .35s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn--primary{background:var(--brand);color:var(--brand-ink)}
+.btn--accent{background:var(--accent);color:var(--ink)}
+.btn--ghost{border-color:currentColor;background:transparent}
+
+/* ── Header ─────────────────────────────────────────────── */
+.site-header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid transparent;transition:border-color .3s var(--ease)}
+.site-header.is-scrolled{border-bottom-color:var(--line)}
+.header__inner{height:var(--header-h);display:flex;align-items:center;gap:var(--space-4)}
+.brand{display:inline-flex;align-items:center;gap:var(--space-3);min-height:44px;text-decoration:none;margin-right:auto}
+.brand__mark{width:38px;height:38px;flex:none}
+.brand__name{display:flex;flex-direction:column;line-height:1}
+.brand__name b{font-stretch:125%;font-weight:800;font-size:1.0625rem;letter-spacing:.06em;text-transform:uppercase;color:var(--brand)}
+.brand__name span{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--ink-soft);margin-top:2px}
+.header__call{display:none;min-height:44px;padding:0 18px;font-size:var(--step--1)}
+.menu-toggle{width:48px;height:48px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--surface);cursor:pointer;flex:none}
+.menu-toggle span{grid-area:1/1;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .35s var(--ease)}
+.menu-toggle span:first-child{transform:translateY(-4px)}
+.menu-toggle span:last-child{transform:translateY(4px)}
+.is-open .menu-toggle span:first-child{transform:rotate(45deg)}
+.is-open .menu-toggle span:last-child{transform:rotate(-45deg)}
+.nav ul{list-style:none;margin:0;padding:0}
+.nav a{text-decoration:none}
+@media (max-width:959.98px){
+  .nav{position:fixed;left:0;right:0;top:var(--header-h);bottom:0;z-index:60;display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-7);padding:var(--space-6) var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));overflow-y:auto;background:var(--brand);color:var(--brand-ink);--focus:var(--accent);opacity:0;visibility:hidden;transform:translateY(-12px);transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s linear .35s}
+  .is-open .nav{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+  .nav li{border-bottom:1px solid var(--line-light)}
+  .nav li a{display:flex;align-items:center;justify-content:space-between;min-height:64px;font-size:var(--step-3);font-stretch:125%;font-weight:800;letter-spacing:-.02em}
+  .nav li a::after{content:"";width:10px;height:10px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);transform:rotate(45deg)}
+  .nav__extra{display:grid;gap:var(--space-3)}
+  .nav__extra p{color:rgba(243,239,228,.75);font-size:var(--step--1)}
+}
+@media (min-width:768px){.header__call{display:inline-flex}}
+@media (min-width:960px){
+  .menu-toggle,.nav__extra{display:none}
+  .nav ul{display:flex;gap:2px}
+  .nav li a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;font-weight:500;font-size:var(--step--1);transition:background-color .3s var(--ease)}
+  .nav li a:hover{background:rgba(29,59,42,.08)}
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:max(540px,calc(100svh - var(--header-h) - var(--bar-h)));color:#fff;background:var(--brand-deep)}
+.hero__media{position:absolute;inset:0;z-index:-1;margin:0;overflow:hidden}
+.hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 32%}
+.hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,37,26,.18) 0%,rgba(17,37,26,0) 20%,rgba(17,37,26,.50) 46%,rgba(17,37,26,.90) 74%,rgba(17,37,26,.96) 100%)}
+.hero__caption{display:none}
+.hero__body{width:100%;max-width:calc(var(--max) + 2*var(--gutter));margin-inline:auto;padding:var(--space-8) var(--gutter) var(--space-6)}
+.hero .eyebrow{color:rgba(255,255,255,.88);letter-spacing:.1em}
+@media (max-width:419.98px){.hero .eyebrow::before{display:none}}
+.hero__title{display:flex;flex-direction:column;margin-top:var(--space-3);line-height:.9;letter-spacing:0}
+.hero__name{font-stretch:125%;font-weight:800;text-transform:uppercase;font-size:min(15vw,8rem);letter-spacing:-.035em}
+.hero__sub{font-family:var(--serif);font-style:italic;font-weight:400;font-size:min(7.4vw,3.5rem);line-height:1.1;color:var(--accent);padding-left:.12em}
+.hero__promise{margin-top:var(--space-5);max-width:20ch;font-size:var(--step-2);font-weight:600;line-height:1.15;letter-spacing:-.015em}
+.hero__lead{display:none;margin-top:var(--space-4);max-width:46ch;color:rgba(255,255,255,.86)}
+.chip{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:var(--space-5);padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.38);text-decoration:none;font-size:var(--step--1);font-weight:600}
+.chip .stars{width:80px;height:16px;color:var(--accent)}
+.chip small{font-size:inherit;font-weight:400;opacity:.85}
+.hero__actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-4)}
+.hero__actions .btn--accent{flex:1 1 auto}
+.hero__actions .btn--ghost{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .hero__media img{animation:settle 2.6s var(--ease) both}
+  @keyframes settle{from{transform:scale(1.08)}to{transform:none}}
+}
+@media (min-width:640px){
+  .hero__lead{display:block}
+  .hero__actions .btn--accent{flex:0 0 auto}
+  .hero__actions .btn--ghost{display:inline-flex}
+}
+@media (min-width:960px){
+  .hero{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:center;gap:clamp(40px,5vw,80px);min-height:0;max-width:calc(var(--max) + 2*var(--gutter));margin-inline:auto;padding:var(--space-7) var(--gutter) var(--space-9);color:var(--ink);background:none}
+  .hero__media{position:relative;inset:auto;z-index:0;order:2;aspect-ratio:4/5;border-radius:var(--r-3);box-shadow:var(--shadow-3)}
+  .hero__media::after{background:linear-gradient(180deg,rgba(17,37,26,0) 70%,rgba(17,37,26,.55) 100%)}
+  .hero__caption{display:block;position:absolute;left:24px;right:24px;bottom:20px;z-index:1;color:#fff;font-size:var(--step--1);font-weight:500}
+  .hero__body{order:1;padding:0}
+  .hero .eyebrow{color:var(--ink-soft);letter-spacing:.14em}
+  .hero__name{font-size:min(9.2vw,7.25rem);color:var(--brand)}
+  .hero__sub{font-size:min(4.4vw,3.5rem);color:var(--ink-soft)}
+  .hero__promise{margin-top:var(--space-6);font-size:var(--step-3);line-height:1.1;max-width:19ch}
+  .hero__lead{color:var(--ink-soft)}
+  .chip{border-color:var(--line);background:var(--surface);box-shadow:var(--shadow-1)}
+  .chip .stars{color:var(--brand)}
+  .hero .btn--accent{background:var(--brand);color:var(--brand-ink)}
+  .hero__actions{margin-top:var(--space-5)}
+}
+
+/* ── Proof ──────────────────────────────────────────────── */
+.proof{background:var(--surface)}
+.proof__top{display:grid;gap:var(--space-7)}
+.topics-intro{margin-top:var(--space-5);color:var(--ink-soft);font-size:var(--step--1)}
+.topics{list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-2);margin:var(--space-3) 0 0;padding:0}
+.topics li{display:inline-flex;align-items:baseline;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:var(--step--1);font-weight:600}
+.topics span{font-stretch:125%;font-weight:800;color:var(--brand)}
+.score{position:relative;overflow:hidden;display:grid;gap:var(--space-2);padding:clamp(24px,4vw,40px);border-radius:var(--r-3);background:var(--brand);color:var(--brand-ink);box-shadow:var(--shadow-2);--focus:var(--accent)}
+.score__num{font-size:var(--step-5);line-height:.9;letter-spacing:-.045em}
+.score .stars{width:130px;height:26px;color:var(--accent);margin-top:var(--space-2)}
+.score__count{font-size:var(--step-1)}
+.score__count b{font-stretch:125%;font-weight:800}
+.score .btn{margin-top:var(--space-4);justify-self:start}
+.score__lines{position:absolute;right:-90px;top:-70px;width:320px;height:auto;color:var(--accent);opacity:.22;pointer-events:none}
+.pull{margin:var(--space-8) 0 0;position:relative}
+.pull blockquote p{font-family:var(--serif);font-style:italic;font-size:var(--step-4);line-height:1.08;letter-spacing:-.01em;color:var(--brand);max-width:22ch}
+.pull figcaption{display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-4);font-weight:600}
+.pull figcaption .stars{color:var(--brand);width:80px;height:16px}
+@media (min-width:960px){
+  .proof__top{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:end;gap:clamp(48px,6vw,96px)}
+  .pull{margin-left:calc(100%/12)}
+}
+
+.rail-wrap{margin-top:var(--space-8)}
+.rail-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.rail-head p{font-weight:600}
+.rail-ctrl{display:none;gap:var(--space-2)}
+.rail-ctrl button{width:48px;height:48px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--bg);cursor:pointer;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.rail-ctrl button:disabled{opacity:.35;cursor:default}
+.rail{list-style:none;margin:var(--space-5) calc(-1*var(--gutter)) 0;padding:4px var(--gutter) var(--space-5);display:grid;grid-auto-flow:column;grid-auto-columns:min(86%,380px);gap:var(--space-4);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.review{scroll-snap-align:start;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-6) var(--space-5);border-radius:var(--r-2);background:var(--bg);border:1px solid var(--line)}
+.review .stars{color:var(--brand)}
+.review blockquote{flex:1}
+.review blockquote p{font-size:var(--step-0);line-height:1.55}
+.review footer{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3);padding-top:var(--space-4);border-top:1px solid var(--line);font-size:var(--step--1)}
+.review footer b{font-weight:600}
+.review time{color:var(--ink-soft)}
+.proof__more{margin-top:var(--space-4)}
+@media (min-width:768px){.rail-ctrl{display:flex}}
+@media (min-width:1200px){.rail{margin-inline:0;padding-inline:0;scroll-padding-inline:0}}
+
+/* ── Métier ─────────────────────────────────────────────── */
+.metier__grid{display:grid;gap:var(--space-7)}
+.metier__photo{margin:var(--space-6) 0 0;aspect-ratio:4/3;border-radius:var(--r-2);overflow:hidden;box-shadow:var(--shadow-2)}
+.metier__photo img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(1.16);transform-origin:0 60%}
+.services{list-style:none;margin:0;padding:0}
+.services li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-2) var(--space-5);padding:var(--space-6) 0;border-top:1px solid var(--line)}
+.services li:last-child{border-bottom:1px solid var(--line)}
+.services__num{font-stretch:125%;font-weight:800;font-size:var(--step-1);line-height:1.5;color:var(--brand);min-width:2.4ch}
+.services h3{font-size:var(--step-2);letter-spacing:-.015em}
+.services p{margin-top:var(--space-2);color:var(--ink-soft);max-width:52ch}
+.services blockquote{margin-top:var(--space-4);padding:var(--space-3) 0 var(--space-3) var(--space-4);border-left:2px solid var(--brand)}
+.services blockquote p{margin:0;font-family:var(--serif);font-style:italic;font-size:var(--step-1);line-height:1.35;color:var(--ink)}
+.services cite{display:block;margin-top:var(--space-1);font-style:normal;font-size:var(--step--1);color:var(--ink-soft)}
+@media (min-width:960px){
+  .metier__grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,6vw,96px);align-items:start}
+  .metier__photo{aspect-ratio:4/5}
+  .services li{padding:var(--space-7) 0}
+}
+
+/* ── Chantiers (galerie) ───────────────────────────────── */
+.chantiers{background:var(--surface)}
+.chantiers__head{display:grid;gap:var(--space-5)}
+.chantiers__quote{font-family:var(--serif);font-style:italic;font-size:var(--step-1);line-height:1.4;max-width:40ch}
+.chantiers__quote cite{display:block;margin-top:var(--space-2);font-family:var(--sans);font-style:normal;font-size:var(--step--1);color:var(--ink-soft)}
+.gallery{list-style:none;margin:var(--space-7) 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3)}
+.gallery li:first-child{grid-column:1/-1}
+.g{position:relative;display:block;aspect-ratio:3/4;border-radius:var(--r-2);overflow:hidden;background:var(--line);color:#fff;text-decoration:none}
+.gallery li:first-child .g{aspect-ratio:4/3}
+.g img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.g:hover img{transform:scale(1.04)}
+.g::after{content:"";position:absolute;inset:auto 0 0;height:60%;background:linear-gradient(0deg,rgba(17,37,26,.82),rgba(17,37,26,0));pointer-events:none}
+.g__cap{position:absolute;left:14px;right:14px;bottom:12px;z-index:1;font-size:var(--step--1);font-weight:600;line-height:1.3}
+.g__zoom{position:absolute;top:10px;right:10px;z-index:1;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:rgba(17,37,26,.55)}
+.g__zoom .i{width:16px;height:16px}
+@media (min-width:640px){.gallery{gap:var(--space-4)}}
+@media (min-width:960px){
+  .chantiers__head{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:end;gap:clamp(48px,6vw,96px)}
+  .gallery{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .gallery li:nth-child(1){grid-column:1/span 6;grid-row:1/span 2}
+  .gallery li:nth-child(2){grid-column:7/span 3;grid-row:1}
+  .gallery li:nth-child(3){grid-column:10/span 3;grid-row:1}
+  .gallery li:nth-child(4){grid-column:7/span 3;grid-row:2}
+  .gallery li:nth-child(5){grid-column:10/span 3;grid-row:2}
+  .gallery li:first-child .g{aspect-ratio:auto;height:100%}
+}
+
+/* Lightbox */
+.lightbox{width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:var(--space-8) var(--space-4);border:0;background:rgba(12,24,17,.96);color:#fff;--focus:var(--accent)}
+.lightbox[open]{display:grid;place-items:center}
+.lightbox::backdrop{background:rgba(12,24,17,.7)}
+.lightbox figure{margin:0;display:grid;justify-items:center;gap:var(--space-3);max-width:min(100%,900px)}
+.lightbox img{width:auto;max-width:100%;max-height:calc(100dvh - 190px);border-radius:var(--r-1);object-fit:contain}
+.lightbox figcaption{text-align:center;font-size:var(--step--1);color:rgba(255,255,255,.86);max-width:50ch}
+.lb-btn{position:absolute;width:48px;height:48px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.lb-close{top:14px;right:14px}
+.lb-prev,.lb-next{bottom:18px}
+.lb-prev{left:calc(50% - 60px)}
+.lb-next{left:calc(50% + 12px)}
+@media (min-width:768px){
+  .lb-prev,.lb-next{bottom:auto;top:calc(50% - 24px)}
+  .lb-prev{left:20px}.lb-next{left:auto;right:20px}
+}
+
+/* ── Zone ───────────────────────────────────────────────── */
+.zone{position:relative;overflow:hidden;isolation:isolate;padding-block:var(--section);background:var(--brand);color:var(--brand-ink);--focus:var(--accent)}
+.zone__lines{position:absolute;z-index:-1;top:50%;right:-55%;width:max(700px,120%);height:auto;transform:translateY(-50%);color:var(--accent);opacity:.26;pointer-events:none}
+.zone .eyebrow{color:var(--accent)}
+.zone__title{margin-top:var(--space-5);font-size:var(--step-4);max-width:17ch}
+.zone__title em{font-style:normal;color:var(--accent)}
+.zone__facts{display:grid;gap:var(--space-5);margin:var(--space-8) 0 0}
+.zone__facts div{padding-top:var(--space-4);border-top:1px solid var(--line-light)}
+.zone__facts dt{font-size:var(--step--1);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.zone__facts dd{margin:var(--space-2) 0 0;font-size:var(--step-1);line-height:1.4}
+@media (min-width:640px){.zone__facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:960px){.zone__lines{right:-14%;width:min(1100px,82%)}}
+
+/* ── Horaires & accès ───────────────────────────────────── */
+.horaires__grid{display:grid;gap:var(--space-7)}
+.status{display:inline-flex;align-items:center;gap:10px;margin-top:var(--space-5);min-height:40px;padding:6px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:var(--step--1);font-weight:600}
+.status__dot{position:relative;width:10px;height:10px;border-radius:50%;background:var(--ink-soft);flex:none}
+.status[data-state="open"] .status__dot{background:var(--open)}
+.status[data-state="closed"] .status__dot{background:var(--closed)}
+@media (prefers-reduced-motion:no-preference){
+  .status[data-state="open"] .status__dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--open);animation:ping 2s var(--ease) infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.55}to{transform:scale(2.8);opacity:0}}
+}
+.hours{width:100%;margin-top:var(--space-5);border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+.hours th,.hours td{padding:13px 12px;border-bottom:1px solid var(--line)}
+.hours th{text-align:left;font-weight:500}
+.hours td{text-align:right;white-space:nowrap}
+.hours tr.is-closed td{color:var(--ink-soft)}
+.hours tr.is-today th,.hours tr.is-today td{background:var(--brand);color:var(--brand-ink);border-bottom-color:transparent;font-weight:600}
+.hours tr.is-today th{border-radius:var(--r-1) 0 0 var(--r-1)}
+.hours tr.is-today td{border-radius:0 var(--r-1) var(--r-1) 0}
+.hours tr.is-today th::after{content:"Aujourd’hui";display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:var(--accent);color:var(--ink);font-size:.75rem;font-weight:600;vertical-align:2px}
+.hours__note{margin-top:var(--space-4);font-size:var(--step--1);color:var(--ink-soft)}
+.map{position:relative;aspect-ratio:1/1;border-radius:var(--r-3);overflow:hidden;background:var(--brand);color:var(--brand-ink);box-shadow:var(--shadow-2)}
+.map__fallback{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:var(--space-3);padding:var(--space-5);text-align:center}
+.map__fallback .i{width:32px;height:32px;color:var(--accent)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.access__card{position:relative;margin:calc(-1*var(--space-8)) var(--space-4) 0;padding:var(--space-5);border-radius:var(--r-2);background:var(--surface);box-shadow:var(--shadow-2)}
+.access__card address{font-style:normal;font-size:var(--step-1);line-height:1.4;font-weight:600}
+.access__label{font-size:var(--step--1);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:var(--space-2)}
+.access__actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-4)}
+.access__actions .btn{flex:1 1 180px;min-height:48px;padding:0 18px;font-size:var(--step--1)}
+@media (min-width:640px){.map{aspect-ratio:4/3}}
+@media (min-width:960px){
+  .horaires__grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,6vw,96px);align-items:start}
+  .access{padding-top:var(--space-3)}
+  .access__card{margin:calc(-1*var(--space-9)) 0 0 var(--space-7);max-width:440px}
+}
+
+/* ── Contact ────────────────────────────────────────────── */
+.contact{background:var(--surface)}
+.contact__grid{display:grid;gap:var(--space-7)}
+.contact__phone{display:inline-flex;align-items:center;min-height:52px;margin-top:var(--space-5);font-stretch:125%;font-weight:800;font-size:clamp(2rem,1rem + 5vw,4.25rem);line-height:1.05;letter-spacing:-.03em;color:var(--brand);text-decoration:none;white-space:nowrap}
+.contact__phone:hover{text-decoration:underline;text-decoration-thickness:3px}
+.contact__list{list-style:none;margin:var(--space-6) 0 0;padding:0}
+.contact__list a{display:flex;align-items:center;gap:var(--space-4);min-height:60px;padding:var(--space-2) 0;border-bottom:1px solid var(--line);text-decoration:none;font-weight:500;overflow-wrap:anywhere}
+.contact__list li:first-child a{border-top:1px solid var(--line)}
+.contact__list .ic{width:42px;height:42px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--bg);color:var(--brand)}
+.contact__list small{display:block;font-size:var(--step--1);color:var(--ink-soft);font-weight:400}
+.devis{display:grid;gap:var(--space-4);padding:clamp(20px,4vw,40px);border-radius:var(--r-3);background:var(--bg);border:1px solid var(--line);box-shadow:var(--shadow-1)}
+.devis h3{font-size:var(--step-2)}
+.devis__intro{color:var(--ink-soft);font-size:var(--step--1)}
+.field{display:grid;gap:6px}
+.field label{font-size:var(--step--1);font-weight:600}
+.field__hint{font-weight:400;color:var(--ink-soft)}
+.field__hint::before{content:"· "}
+.field input,.field select,.field textarea{width:100%;min-height:50px;padding:12px 14px;border:1px solid rgba(21,35,27,.3);border-radius:var(--r-1);background:var(--surface);color:var(--ink);font:inherit;font-size:max(16px,1em)}
+.field select{appearance:none;padding-right:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231D3B2A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:20px}
+.field textarea{min-height:120px;resize:vertical}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline-offset:1px}
+.devis__actions{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-2)}
+.devis__actions .btn{padding:0 12px}
+@media (min-width:960px){.contact__grid{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(48px,6vw,96px);align-items:start}}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.site-footer{padding-block:var(--space-8) var(--space-6);background:var(--ink);color:rgba(243,239,228,.8);--focus:var(--accent)}
+.footer__grid{display:grid;gap:var(--space-6)}
+.footer__brand b{display:block;font-stretch:125%;font-weight:800;font-size:var(--step-3);line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:var(--bg)}
+.footer__brand span{display:block;font-family:var(--serif);font-style:italic;font-size:var(--step-1);color:var(--accent);margin-top:var(--space-1)}
+.footer__brand p{margin-top:var(--space-4);max-width:34ch}
+.footer__label{font-size:var(--step--1);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--space-2)}
+.site-footer address{font-style:normal}
+.site-footer a{color:var(--bg)}
+.footer__social{display:flex;gap:var(--space-2);margin-top:var(--space-2)}
+.footer__social a{width:46px;height:46px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line-light)}
+.footer__bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-3) var(--space-5);margin-top:var(--space-7);padding-top:var(--space-5);border-top:1px solid var(--line-light);font-size:var(--step--1)}
+@media (min-width:640px){.footer__grid{grid-template-columns:1fr 1fr}}
+@media (min-width:960px){.footer__grid{grid-template-columns:2fr 1fr 1.2fr 1fr}}
+
+/* ── Mobile action bar ──────────────────────────────────── */
+.actionbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-bottom:env(safe-area-inset-bottom);background:var(--ink);box-shadow:0 -10px 30px -10px rgba(21,35,27,.4);--focus:var(--accent)}
+.actionbar a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:var(--bar-h);color:var(--bg);text-decoration:none;font-size:.9375rem;font-weight:600}
+.actionbar a+a{border-left:1px solid var(--line-light)}
+.actionbar a:first-child{background:var(--accent);color:var(--ink)}
+@media (min-width:768px){.actionbar{display:none}}
+
+/* ── Reveal ─────────────────────────────────────────────── */
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .reveal.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"HomeAndConstructionBusiness",
+  "name":"Sauser espaces verts",
+  "description":"Paysagiste : création, aménagement et entretien de jardins à La Chaux-de-Fonds, dans les Montagnes neuchâteloises et le canton de Neuchâtel.",
+  "telephone":"+41799239254",
+  "email":"info@sauser-espacesverts.ch",
+  "address":{"@type":"PostalAddress","streetAddress":"Les Bulles 55","postalCode":"2300","addressLocality":"La Chaux-de-Fonds","addressRegion":"NE","addressCountry":"CH"},
+  "geo":{"@type":"GeoCoordinates","latitude":47.1387253,"longitude":6.8366576},
+  "hasMap":"https://www.google.com/maps/place/?q=place_id:ChIJGbEkNrH7jUcRVBZp1VrEp_U",
+  "areaServed":[{"@type":"City","name":"La Chaux-de-Fonds"},{"@type":"AdministrativeArea","name":"Montagnes neuchâteloises"},{"@type":"AdministrativeArea","name":"Canton de Neuchâtel"}],
+  "openingHoursSpecification":[
+    {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"07:00","closes":"18:00"},
+    {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"07:00","closes":"17:00"}
+  ],
+  "sameAs":["https://www.facebook.com/profile.php?id=61580633641396","https://www.instagram.com/sauser.espaces.verts"]
+}
+</script>
+<!--sf:preview--><meta name="robots" content="noindex, nofollow"><!--/sf:preview-->
+<!--sf:og--><meta property="og:image" content="https://sauser-espaces-verts-la-chaux-de-fonds.aymenjallouli.dev/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://sauser-espaces-verts-la-chaux-de-fonds.aymenjallouli.dev/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sauser-espaces-verts-la-chaux-de-fonds.aymenjallouli.dev/og.jpg"><!--/sf:og-->
+</head>
+<body id="top">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-sms" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></symbol>
+  <symbol id="i-nav" viewBox="0 0 24 24"><path d="M3 11 22 2l-9 19-2-8-8-2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.4A4 4 0 1 1 12.6 8 4 4 0 0 1 16 11.4z"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+  <symbol id="i-stars" viewBox="0 0 120 24"><path id="star" d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z"/><use href="#star" x="24"/><use href="#star" x="48"/><use href="#star" x="72"/><use href="#star" x="96"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="site-header">
+  <div class="container header__inner">
+    <a class="brand" href="#top" aria-label="Sauser espaces verts, retour en haut de page">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#1D3B2A"/><path d="M44 21.5c-2.4-3.3-6.6-5.5-12-5.5-7.2 0-11.6 3.9-11.6 9 0 11.6 23.6 7.3 23.6 17.8 0 4.6-4.4 8.2-11.6 8.2-5.8 0-10.4-2.4-13-6" fill="none" stroke="#C2DA5F" stroke-width="6" stroke-linecap="round"/></svg>
+      <span class="brand__name"><b>Sauser</b><span>espaces verts</span></span>
+    </a>
+    <nav class="nav" id="site-nav" aria-label="Navigation principale">
+      <ul>
+        <li><a href="#avis">Avis</a></li>
+        <li><a href="#metier">Le métier</a></li>
+        <li><a href="#chantiers">Chantiers</a></li>
+        <li><a href="#horaires">Horaires &amp; accès</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav__extra">
+        <a class="btn btn--accent" href="tel:+41799239254"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>079 923 92 54</a>
+        <p>Du lundi au samedi, dès 7h. Les Bulles 55, <span class="nowrap">La Chaux-de-Fonds</span>.</p>
+      </div>
+    </nav>
+    <a class="btn btn--primary header__call" href="tel:+41799239254"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>079 923 92 54</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <figure class="hero__media">
+      <img src="assets/photos/photo-05.jpg" width="1200" height="1600" fetchpriority="high" decoding="async" alt="Chemin en gravier clair fraîchement posé, à l’ombre de deux grands arbres, avec un tracteur et une mini-pelle au fond">
+      <figcaption class="hero__caption">Accès gravillonné, sous les arbres.</figcaption>
+    </figure>
+    <div class="hero__body">
+      <p class="eyebrow"><span>Paysagiste · <span class="nowrap">La Chaux-de-Fonds</span></span></p>
+      <h1 class="hero__title" id="hero-title"><span class="hero__name">Sauser</span><span class="hero__sub">espaces verts</span></h1>
+      <p class="hero__promise">Du premier coup de pelle à la dernière tonte, dans les Montagnes neuchâteloises.</p>
+      <p class="hero__lead">Création, aménagement et entretien de jardins pour particuliers et professionnels, à La Chaux-de-Fonds et dans tout le canton.</p>
+      <a class="chip" href="https://www.google.com/maps/place/?q=place_id:ChIJGbEkNrH7jUcRVBZp1VrEp_U" target="_blank" rel="noopener" aria-label="Note Google 5,0 sur 5, 40 avis, voir sur Google">
+        <svg class="stars" aria-hidden="true"><use href="#i-stars"/></svg>5,0 <small>· 40 avis Google</small>
+      </a>
+      <div class="hero__actions">
+        <a class="btn btn--accent" href="tel:+41799239254"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>Demander un devis</a>
+        <a class="btn btn--ghost" href="#chantiers">Voir les chantiers</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section proof" id="avis" aria-labelledby="avis-title">
+    <div class="container">
+      <div class="proof__top">
+        <div class="reveal">
+          <p class="eyebrow">Avis Google</p>
+          <h2 class="h2" id="avis-title">Le travail, le chantier, le sourire.</h2>
+          <p class="topics-intro">Les mots qui reviennent le plus dans les avis, avec leur nombre de mentions&nbsp;:</p>
+          <ul class="topics">
+            <li>travail <span>22</span></li>
+            <li>chantier <span>5</span></li>
+            <li>réactif <span>4</span></li>
+            <li>sourire <span>3</span></li>
+            <li>jeune entreprise <span>2</span></li>
+            <li>terrasse <span>2</span></li>
+            <li>respect <span>2</span></li>
+          </ul>
+        </div>
+        <div class="score reveal">
+          <svg class="score__lines" viewBox="170 -20 600 600" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.4" vector-effect="non-scaling-stroke" d="M502 250C502 252 502 255 501 257C501 260 500 262 499 265C497 267 495 270 493 271C491 273 488 274 485 275C482 276 478 277 475 277C472 278 468 277 465 277C462 276 459 274 457 273C455 271 453 269 452 267C450 265 449 263 447 262C446 260 444 259 442 257C440 255 438 252 437 250C436 248 435 245 435 242C436 239 437 236 439 234C441 232 444 230 446 228C449 227 452 225 455 225C459 224 462 224 465 224C469 225 471 226 474 227C477 227 479 228 482 229C485 230 487 230 490 232C492 233 495 234 497 236C499 238 500 240 501 243C502 245 502 248 502 250ZM538 254C538 260 538 265 537 271C536 277 534 283 531 288C528 294 523 299 517 303C512 307 505 310 498 313C491 315 483 317 475 317C468 317 460 317 453 315C446 314 439 310 434 306C429 302 426 297 422 293C419 288 417 284 413 280C409 276 404 274 400 269C395 265 389 260 387 254C384 248 382 241 383 235C384 229 387 222 392 217C396 211 402 206 408 203C415 199 423 196 430 195C438 194 446 195 454 196C461 197 467 200 473 201C480 203 485 205 491 207C497 209 504 209 510 212C515 214 522 218 527 222C531 226 534 232 536 237C538 242 538 248 538 254ZM576 258C576 267 576 276 574 285C572 294 569 304 564 312C558 321 550 329 542 335C533 341 521 346 510 350C499 353 487 356 476 357C464 357 451 357 441 354C430 351 420 345 412 339C404 333 399 324 394 317C388 311 385 305 379 299C373 293 364 288 357 282C350 275 341 267 336 258C331 249 329 238 330 228C331 218 336 207 343 199C349 190 359 182 369 176C380 171 393 167 405 165C417 164 431 166 442 168C453 170 463 175 472 178C482 181 490 183 499 186C509 188 519 189 529 193C538 196 549 201 556 208C563 214 568 223 572 231C575 240 575 249 576 258ZM615 262C616 274 615 287 612 300C609 312 605 326 597 337C590 348 578 359 566 367C553 375 538 382 523 386C508 391 492 395 476 396C460 397 443 396 429 392C414 387 401 379 390 371C380 362 373 350 366 341C358 333 354 325 345 317C336 309 325 303 315 294C305 285 291 274 285 262C278 250 274 234 275 220C276 207 283 192 292 180C301 168 315 156 330 149C344 142 363 137 380 135C396 134 415 137 430 141C445 144 458 151 471 156C484 160 494 163 507 166C520 169 534 170 547 174C560 179 575 185 586 193C596 202 603 214 608 225C613 237 614 250 615 262ZM656 266C657 282 657 299 653 315C648 330 642 347 631 361C621 375 605 388 589 398C573 409 554 416 535 422C516 428 496 433 476 434C456 435 435 434 417 429C399 424 382 412 369 402C356 391 348 376 339 365C329 354 323 345 311 335C300 325 285 318 272 307C258 295 241 282 232 266C224 250 218 230 219 213C221 195 229 176 240 160C252 145 270 130 289 121C308 112 333 106 354 105C376 104 400 110 419 115C438 120 454 130 469 135C485 141 498 144 514 147C530 151 548 151 565 156C582 161 602 168 615 179C629 189 639 205 646 219C653 234 655 250 656 266ZM700 270C701 290 700 310 695 330C689 349 679 369 666 386C652 403 632 417 613 429C593 441 570 450 547 457C524 464 500 471 476 472C453 473 426 472 405 465C383 459 363 445 347 432C332 419 323 402 312 389C300 375 292 365 278 353C264 342 244 334 228 320C211 306 190 289 179 270C168 251 161 226 162 205C164 183 173 159 188 140C202 122 224 103 248 93C271 82 302 76 329 76C356 75 385 84 408 91C431 98 449 110 468 117C486 123 501 126 520 130C539 134 562 132 583 138C604 144 628 152 645 164C663 177 676 195 685 212C694 230 698 250 700 270ZM746 274C748 297 746 323 738 346C731 368 718 392 700 411C683 430 659 446 635 460C611 473 584 483 558 491C531 499 504 507 476 508C449 510 418 509 393 501C368 493 345 477 326 462C308 447 298 427 285 412C271 397 260 385 244 372C227 359 203 349 183 333C163 317 138 297 125 274C112 251 103 222 104 197C106 171 117 142 134 120C151 97 178 76 206 64C234 51 272 46 304 46C336 47 370 59 397 68C424 77 444 93 465 100C487 108 503 111 525 114C548 117 575 115 600 121C625 127 655 135 676 149C697 164 715 185 726 205C738 226 744 251 746 274ZM794 278C797 305 794 335 784 362C774 388 757 415 735 436C714 457 685 475 657 489C629 504 598 514 568 524C538 533 507 542 476 544C445 546 410 545 382 536C353 527 327 509 306 492C285 475 274 452 257 435C241 419 228 406 208 391C188 376 161 365 137 346C114 327 85 304 70 278C54 252 44 218 45 188C47 158 59 124 79 98C99 73 130 48 164 34C197 21 242 15 279 18C316 20 356 36 387 47C417 59 439 77 463 85C487 94 504 96 530 99C556 102 587 98 617 104C647 109 682 119 708 134C733 150 755 174 770 198C784 222 792 251 794 278ZM846 282C849 313 844 348 832 378C819 408 796 438 770 461C744 484 709 502 677 518C645 533 611 544 578 554C544 564 510 575 475 577C441 580 402 579 370 570C339 560 309 540 285 521C262 503 249 478 230 459C211 441 196 427 172 410C149 394 117 381 90 360C64 339 31 312 13 282C-4 252 -16 214 -14 179C-13 145 1 106 23 77C46 48 83 19 122 5C160 -10 213 -14 255 -10C298 -6 342 14 376 28C410 42 433 63 460 72C486 82 505 83 534 85C563 87 599 81 634 86C668 92 710 101 740 118C770 136 797 162 815 190C833 217 843 251 846 282ZM900 286C903 322 897 362 881 395C865 428 835 461 805 486C774 511 733 529 696 545C660 561 623 573 586 584C549 594 512 606 474 610C436 613 394 612 359 602C324 593 291 570 265 550C239 531 223 504 202 484C180 464 161 449 135 431C108 412 71 398 42 374C12 350 -24 320 -44 286C-63 252 -77 209 -75 171C-73 132 -58 88 -33 55C-7 23 35 -9 79 -25C123 -40 184 -43 231 -37C279 -32 329 -6 366 10C404 27 428 50 456 61C485 71 506 71 538 72C570 74 611 64 650 70C690 75 738 84 774 102C809 121 842 150 863 181C884 212 897 250 900 286ZM958 290C961 330 952 376 932 413C912 449 875 484 839 510C802 537 755 554 714 571C673 587 633 599 593 611C553 622 514 636 473 640C432 644 386 644 348 634C310 624 274 600 245 580C215 559 197 531 172 509C147 488 125 472 95 452C65 432 24 415 -9 388C-41 361 -81 328 -102 290C-123 252 -138 205 -136 162C-133 119 -118 70 -89 34C-60 -2 -12 -38 38 -54C87 -70 155 -71 208 -63C262 -55 316 -25 357 -6C398 13 422 40 453 51C484 62 506 59 541 60C577 60 623 48 667 52C712 57 767 65 808 85C849 105 889 138 914 172C939 206 955 250 958 290ZM140 560C140 562 138 565 137 566C135 568 133 569 130 571C128 572 126 572 125 573C123 574 121 576 119 576C117 577 115 578 113 578C111 579 109 579 107 579C104 578 102 578 100 577C98 577 96 576 94 575C92 574 89 573 88 571C87 570 86 568 85 566C84 564 84 562 84 560C84 558 84 556 84 554C84 552 85 550 86 548C88 546 90 545 92 544C95 543 98 543 100 543C103 543 105 543 107 543C109 543 111 543 113 544C115 544 117 544 119 544C121 544 124 545 126 545C128 546 130 547 132 549C134 550 137 552 138 553C139 555 140 558 140 560ZM185 560C184 565 181 571 177 576C173 580 166 583 161 586C156 589 150 591 146 593C141 596 138 598 133 600C128 602 123 605 118 606C113 607 107 607 102 607C96 606 90 605 85 604C79 603 73 601 68 598C63 596 58 592 55 589C51 585 49 580 47 575C46 570 45 565 45 560C45 555 45 550 46 545C47 540 48 534 52 530C55 526 61 522 66 520C72 518 80 518 86 517C92 517 97 518 103 519C108 519 112 519 117 519C123 519 128 518 133 519C139 520 144 521 150 523C155 525 161 528 166 531C171 535 177 539 180 544C183 548 186 555 185 560ZM230 560C229 569 223 578 216 585C210 592 199 597 190 601C182 606 174 608 167 612C159 616 154 620 146 624C139 627 132 631 123 633C115 635 105 636 96 636C87 635 78 633 69 631C61 629 51 626 43 622C35 618 26 612 21 606C15 600 11 591 9 584C6 576 6 568 6 560C6 552 6 544 8 536C10 528 12 519 18 513C23 506 32 500 41 496C50 493 62 493 71 492C81 492 90 494 98 494C107 494 114 494 122 494C130 494 139 493 148 494C157 495 166 497 175 500C184 503 193 508 201 513C209 519 217 526 222 534C227 541 231 551 230 560ZM274 560C272 572 264 585 255 594C246 603 231 610 219 616C208 622 197 626 187 631C177 636 169 642 160 647C150 652 140 658 128 661C117 664 104 665 91 665C79 664 66 662 54 659C41 656 28 652 17 646C6 640 -6 633 -14 624C-22 615 -27 604 -30 593C-33 582 -33 571 -33 560C-32 549 -32 538 -29 527C-26 517 -23 505 -15 496C-8 487 4 478 16 473C28 468 44 468 57 467C70 467 82 469 94 469C105 470 115 469 126 469C138 469 150 467 162 468C175 469 188 472 201 476C213 481 225 487 236 495C247 503 258 513 264 524C271 535 275 548 274 560ZM317 560C315 575 305 591 294 603C282 615 262 623 248 631C233 639 219 642 206 649C194 655 185 663 172 669C160 676 148 684 133 689C119 693 102 695 86 695C70 695 53 691 37 687C21 683 5 678 -9 670C-24 663 -39 653 -49 642C-59 630 -66 616 -69 602C-73 588 -72 574 -71 560C-70 546 -69 532 -65 519C-61 505 -57 491 -47 479C-38 468 -24 457 -9 451C6 444 26 443 43 442C59 441 75 444 89 445C104 445 116 444 131 443C146 443 162 440 178 442C194 443 211 446 227 452C243 458 259 466 272 477C285 487 299 500 306 514C314 528 320 545 317 560Z"/></svg>
+          <p class="score__num wide">5,0</p>
+          <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+          <p class="score__count">sur 5 · <b data-count="40">40</b> avis Google</p>
+          <a class="btn btn--accent" href="https://www.google.com/maps/place/?q=place_id:ChIJGbEkNrH7jUcRVBZp1VrEp_U" target="_blank" rel="noopener">Voir les 40 avis sur Google<svg class="i" aria-hidden="true"><use href="#i-out"/></svg></a>
+        </div>
+      </div>
+
+      <figure class="pull reveal">
+        <blockquote><p>«&nbsp;…&nbsp;le travail ne leur fait vraiment pas peur&nbsp;»</p></blockquote>
+        <figcaption>Pierre-Alain L. <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg></figcaption>
+      </figure>
+
+      <div class="rail-wrap" data-rail>
+        <div class="rail-head">
+          <p>Extraits d’avis, mot pour mot</p>
+          <div class="rail-ctrl">
+            <button type="button" data-dir="-1" aria-label="Avis précédents"><svg class="i" aria-hidden="true"><use href="#i-left"/></svg></button>
+            <button type="button" data-dir="1" aria-label="Avis suivants"><svg class="i" aria-hidden="true"><use href="#i-right"/></svg></button>
+          </div>
+        </div>
+        <ul class="rail" tabindex="0" aria-label="Avis clients, à faire défiler horizontalement">
+          <li class="review">
+            <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+            <blockquote><p>«&nbsp;…&nbsp;Le chantier a été réalisé dans les délais, toujours propre et bien organisé… Le résultat final dépasse mes attentes et met réellement en valeur les extérieurs.&nbsp;»</p></blockquote>
+            <footer><b>Pablo G.</b><time datetime="2026-07-10">juillet 2026</time></footer>
+          </li>
+          <li class="review">
+            <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+            <blockquote><p>«&nbsp;Excellent paysagiste ! Travail soigné, professionnel et réalisé avec beaucoup de sérieux. Le résultat est magnifique et correspond parfaitement à mes attentes. Luca est agréable, ponctuel et à l’écoute.&nbsp;…&nbsp;»</p></blockquote>
+            <footer><b>Ethgn</b><time datetime="2026-07-10">juillet 2026</time></footer>
+          </li>
+          <li class="review">
+            <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+            <blockquote><p>«&nbsp;Très bonne expérience avec Luca ! Très professionnel et souriant … Il m’a posé un mur en gabions et le résultat est niquel&nbsp;…&nbsp;»</p></blockquote>
+            <footer><b>Ben F.</b><time datetime="2026-06-26">juin 2026</time></footer>
+          </li>
+          <li class="review">
+            <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+            <blockquote><p>«&nbsp;Super boulot. Conforme aux attentes ! Réactif et toujours prêt à donner de bons conseils. Je recommande.&nbsp;»</p></blockquote>
+            <footer><b>Olivier M.</b><time datetime="2026-06-12">juin 2026</time></footer>
+          </li>
+          <li class="review">
+            <svg class="stars" role="img" aria-label="5 étoiles sur 5"><use href="#i-stars"/></svg>
+            <blockquote><p>«&nbsp;Toujours une solution , rapide ,efficace et avec le sourire, le travail ne leur fait vraiment pas peur ! merci et bravo !!&nbsp;»</p></blockquote>
+            <footer><b>Pierre-Alain L.</b><time datetime="2026-05-31">mai 2026</time></footer>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section metier" id="metier" aria-labelledby="metier-title">
+    <div class="container metier__grid">
+      <div class="reveal">
+        <p class="eyebrow">Le métier</p>
+        <h2 class="h2" id="metier-title">Du terrain nu au jardin entretenu.</h2>
+        <p class="lead">Sauser espaces verts conçoit, crée et entretient des espaces verts à La Chaux-de-Fonds et environs. La même entreprise pour faire le jardin, puis pour s’en occuper.</p>
+        <figure class="metier__photo">
+          <img src="assets/photos/photo-02.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Allée en gravier neuf qui file sous une rangée d’arbres, prairie fauchée de part et d’autre">
+        </figure>
+      </div>
+      <ol class="services">
+        <li class="reveal">
+          <span class="services__num" aria-hidden="true">01</span>
+          <div>
+            <h3>Création de jardins</h3>
+            <p>Conception et réalisation de jardins, pour les particuliers comme pour les professionnels.</p>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="services__num" aria-hidden="true">02</span>
+          <div>
+            <h3>Aménagements extérieurs</h3>
+            <p>Terrasses, murs en gabions, chemins et accès gravillonnés&nbsp;: tout ce qui se pose, se nivelle et doit tenir.</p>
+            <blockquote>
+              <p>«&nbsp;Il m’a posé un mur en gabions et le résultat est niquel&nbsp;»</p>
+              <cite>Ben F., avis Google</cite>
+            </blockquote>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="services__num" aria-hidden="true">03</span>
+          <div>
+            <h3>Entretien de jardins</h3>
+            <p>Le suivi de votre jardin au fil de l’année, pour qu’il reste net d’une saison à l’autre.</p>
+          </div>
+        </li>
+        <li class="reveal">
+          <span class="services__num" aria-hidden="true">04</span>
+          <div>
+            <h3>Taille, tonte et nettoyage saisonniers</h3>
+            <p>Haies, pelouses, remise en ordre au printemps et à l’automne.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section chantiers" id="chantiers" aria-labelledby="chantiers-title">
+    <div class="container">
+      <div class="chantiers__head reveal">
+        <div>
+          <p class="eyebrow">Sur le chantier</p>
+          <h2 class="h2" id="chantiers-title">Des accès gravillonnés à la terrasse posée.</h2>
+        </div>
+        <blockquote class="chantiers__quote">
+          <p>«&nbsp;Le chantier a été réalisé dans les délais, toujours propre et bien organisé…&nbsp;»</p>
+          <cite>Pablo G., avis Google</cite>
+        </blockquote>
+      </div>
+      <ul class="gallery">
+        <li class="reveal"><a class="g" href="assets/photos/photo-07.jpg" data-lightbox data-caption="Terrasse en dalles posée, terre préparée autour, au pied des immeubles."><img src="assets/photos/photo-07.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Terrasse en grandes dalles grises fraîchement posée dans un jardin en terre préparée, bordé d’une haie, avec un immeuble en arrière-plan"><span class="g__zoom" aria-hidden="true"><svg class="i"><use href="#i-zoom"/></svg></span><span class="g__cap">Terrasse posée, terre préparée</span></a></li>
+        <li class="reveal"><a class="g" href="assets/photos/photo-04.jpg" data-lightbox data-caption="Mini-pelle au travail, en plein soleil, au départ d’un accès gravillonné."><img src="assets/photos/photo-04.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Mini-pelle blanche, bras levé, au bord d’un chemin gravillonné qui part vers une rangée d’arbres, sous un grand soleil"><span class="g__zoom" aria-hidden="true"><svg class="i"><use href="#i-zoom"/></svg></span><span class="g__cap">Mini-pelle à l’ouvrage</span></a></li>
+        <li class="reveal"><a class="g" href="assets/photos/photo-06.jpg" data-lightbox data-caption="Tracteur et benne sur un accès en gravier, près d’une ferme."><img src="assets/photos/photo-06.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Tracteur rouge et benne arrêtés sur un large accès en gravier, à côté d’une ferme, sous un ciel bleu"><span class="g__zoom" aria-hidden="true"><svg class="i"><use href="#i-zoom"/></svg></span><span class="g__cap">Tracteur et benne, accès en gravier</span></a></li>
+        <li class="reveal"><a class="g" href="assets/photos/photo-03.jpg" data-lightbox data-caption="Raccord du chemin gravillonné à la route, mini-pelle en attente."><img src="assets/photos/photo-03.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Chemin en gravier neuf raccordé à une route, mini-pelle garée sur le bas-côté, rubalise le long de la prairie"><span class="g__zoom" aria-hidden="true"><svg class="i"><use href="#i-zoom"/></svg></span><span class="g__cap">Raccord à la route</span></a></li>
+        <li class="reveal"><a class="g" href="assets/photos/photo-01.jpg" data-lightbox data-caption="Matériel en place sous les arbres : tracteur, remorque et mini-pelle."><img src="assets/photos/photo-01.jpg" width="1200" height="1600" loading="lazy" decoding="async" alt="Tracteur tirant une remorque chargée d’une mini-pelle, sur un chemin bordé de grands arbres et de prairies"><span class="g__zoom" aria-hidden="true"><svg class="i"><use href="#i-zoom"/></svg></span><span class="g__cap">Matériel en place</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="zone" id="zone" aria-labelledby="zone-title">
+    <svg class="zone__lines" viewBox="0 0 800 700" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" d="M502 250C502 252 502 255 501 257C501 260 500 262 499 265C497 267 495 270 493 271C491 273 488 274 485 275C482 276 478 277 475 277C472 278 468 277 465 277C462 276 459 274 457 273C455 271 453 269 452 267C450 265 449 263 447 262C446 260 444 259 442 257C440 255 438 252 437 250C436 248 435 245 435 242C436 239 437 236 439 234C441 232 444 230 446 228C449 227 452 225 455 225C459 224 462 224 465 224C469 225 471 226 474 227C477 227 479 228 482 229C485 230 487 230 490 232C492 233 495 234 497 236C499 238 500 240 501 243C502 245 502 248 502 250ZM538 254C538 260 538 265 537 271C536 277 534 283 531 288C528 294 523 299 517 303C512 307 505 310 498 313C491 315 483 317 475 317C468 317 460 317 453 315C446 314 439 310 434 306C429 302 426 297 422 293C419 288 417 284 413 280C409 276 404 274 400 269C395 265 389 260 387 254C384 248 382 241 383 235C384 229 387 222 392 217C396 211 402 206 408 203C415 199 423 196 430 195C438 194 446 195 454 196C461 197 467 200 473 201C480 203 485 205 491 207C497 209 504 209 510 212C515 214 522 218 527 222C531 226 534 232 536 237C538 242 538 248 538 254ZM576 258C576 267 576 276 574 285C572 294 569 304 564 312C558 321 550 329 542 335C533 341 521 346 510 350C499 353 487 356 476 357C464 357 451 357 441 354C430 351 420 345 412 339C404 333 399 324 394 317C388 311 385 305 379 299C373 293 364 288 357 282C350 275 341 267 336 258C331 249 329 238 330 228C331 218 336 207 343 199C349 190 359 182 369 176C380 171 393 167 405 165C417 164 431 166 442 168C453 170 463 175 472 178C482 181 490 183 499 186C509 188 519 189 529 193C538 196 549 201 556 208C563 214 568 223 572 231C575 240 575 249 576 258ZM615 262C616 274 615 287 612 300C609 312 605 326 597 337C590 348 578 359 566 367C553 375 538 382 523 386C508 391 492 395 476 396C460 397 443 396 429 392C414 387 401 379 390 371C380 362 373 350 366 341C358 333 354 325 345 317C336 309 325 303 315 294C305 285 291 274 285 262C278 250 274 234 275 220C276 207 283 192 292 180C301 168 315 156 330 149C344 142 363 137 380 135C396 134 415 137 430 141C445 144 458 151 471 156C484 160 494 163 507 166C520 169 534 170 547 174C560 179 575 185 586 193C596 202 603 214 608 225C613 237 614 250 615 262ZM656 266C657 282 657 299 653 315C648 330 642 347 631 361C621 375 605 388 589 398C573 409 554 416 535 422C516 428 496 433 476 434C456 435 435 434 417 429C399 424 382 412 369 402C356 391 348 376 339 365C329 354 323 345 311 335C300 325 285 318 272 307C258 295 241 282 232 266C224 250 218 230 219 213C221 195 229 176 240 160C252 145 270 130 289 121C308 112 333 106 354 105C376 104 400 110 419 115C438 120 454 130 469 135C485 141 498 144 514 147C530 151 548 151 565 156C582 161 602 168 615 179C629 189 639 205 646 219C653 234 655 250 656 266ZM700 270C701 290 700 310 695 330C689 349 679 369 666 386C652 403 632 417 613 429C593 441 570 450 547 457C524 464 500 471 476 472C453 473 426 472 405 465C383 459 363 445 347 432C332 419 323 402 312 389C300 375 292 365 278 353C264 342 244 334 228 320C211 306 190 289 179 270C168 251 161 226 162 205C164 183 173 159 188 140C202 122 224 103 248 93C271 82 302 76 329 76C356 75 385 84 408 91C431 98 449 110 468 117C486 123 501 126 520 130C539 134 562 132 583 138C604 144 628 152 645 164C663 177 676 195 685 212C694 230 698 250 700 270ZM746 274C748 297 746 323 738 346C731 368 718 392 700 411C683 430 659 446 635 460C611 473 584 483 558 491C531 499 504 507 476 508C449 510 418 509 393 501C368 493 345 477 326 462C308 447 298 427 285 412C271 397 260 385 244 372C227 359 203 349 183 333C163 317 138 297 125 274C112 251 103 222 104 197C106 171 117 142 134 120C151 97 178 76 206 64C234 51 272 46 304 46C336 47 370 59 397 68C424 77 444 93 465 100C487 108 503 111 525 114C548 117 575 115 600 121C625 127 655 135 676 149C697 164 715 185 726 205C738 226 744 251 746 274ZM794 278C797 305 794 335 784 362C774 388 757 415 735 436C714 457 685 475 657 489C629 504 598 514 568 524C538 533 507 542 476 544C445 546 410 545 382 536C353 527 327 509 306 492C285 475 274 452 257 435C241 419 228 406 208 391C188 376 161 365 137 346C114 327 85 304 70 278C54 252 44 218 45 188C47 158 59 124 79 98C99 73 130 48 164 34C197 21 242 15 279 18C316 20 356 36 387 47C417 59 439 77 463 85C487 94 504 96 530 99C556 102 587 98 617 104C647 109 682 119 708 134C733 150 755 174 770 198C784 222 792 251 794 278ZM846 282C849 313 844 348 832 378C819 408 796 438 770 461C744 484 709 502 677 518C645 533 611 544 578 554C544 564 510 575 475 577C441 580 402 579 370 570C339 560 309 540 285 521C262 503 249 478 230 459C211 441 196 427 172 410C149 394 117 381 90 360C64 339 31 312 13 282C-4 252 -16 214 -14 179C-13 145 1 106 23 77C46 48 83 19 122 5C160 -10 213 -14 255 -10C298 -6 342 14 376 28C410 42 433 63 460 72C486 82 505 83 534 85C563 87 599 81 634 86C668 92 710 101 740 118C770 136 797 162 815 190C833 217 843 251 846 282ZM900 286C903 322 897 362 881 395C865 428 835 461 805 486C774 511 733 529 696 545C660 561 623 573 586 584C549 594 512 606 474 610C436 613 394 612 359 602C324 593 291 570 265 550C239 531 223 504 202 484C180 464 161 449 135 431C108 412 71 398 42 374C12 350 -24 320 -44 286C-63 252 -77 209 -75 171C-73 132 -58 88 -33 55C-7 23 35 -9 79 -25C123 -40 184 -43 231 -37C279 -32 329 -6 366 10C404 27 428 50 456 61C485 71 506 71 538 72C570 74 611 64 650 70C690 75 738 84 774 102C809 121 842 150 863 181C884 212 897 250 900 286ZM958 290C961 330 952 376 932 413C912 449 875 484 839 510C802 537 755 554 714 571C673 587 633 599 593 611C553 622 514 636 473 640C432 644 386 644 348 634C310 624 274 600 245 580C215 559 197 531 172 509C147 488 125 472 95 452C65 432 24 415 -9 388C-41 361 -81 328 -102 290C-123 252 -138 205 -136 162C-133 119 -118 70 -89 34C-60 -2 -12 -38 38 -54C87 -70 155 -71 208 -63C262 -55 316 -25 357 -6C398 13 422 40 453 51C484 62 506 59 541 60C577 60 623 48 667 52C712 57 767 65 808 85C849 105 889 138 914 172C939 206 955 250 958 290ZM140 560C140 562 138 565 137 566C135 568 133 569 130 571C128 572 126 572 125 573C123 574 121 576 119 576C117 577 115 578 113 578C111 579 109 579 107 579C104 578 102 578 100 577C98 577 96 576 94 575C92 574 89 573 88 571C87 570 86 568 85 566C84 564 84 562 84 560C84 558 84 556 84 554C84 552 85 550 86 548C88 546 90 545 92 544C95 543 98 543 100 543C103 543 105 543 107 543C109 543 111 543 113 544C115 544 117 544 119 544C121 544 124 545 126 545C128 546 130 547 132 549C134 550 137 552 138 553C139 555 140 558 140 560ZM185 560C184 565 181 571 177 576C173 580 166 583 161 586C156 589 150 591 146 593C141 596 138 598 133 600C128 602 123 605 118 606C113 607 107 607 102 607C96 606 90 605 85 604C79 603 73 601 68 598C63 596 58 592 55 589C51 585 49 580 47 575C46 570 45 565 45 560C45 555 45 550 46 545C47 540 48 534 52 530C55 526 61 522 66 520C72 518 80 518 86 517C92 517 97 518 103 519C108 519 112 519 117 519C123 519 128 518 133 519C139 520 144 521 150 523C155 525 161 528 166 531C171 535 177 539 180 544C183 548 186 555 185 560ZM230 560C229 569 223 578 216 585C210 592 199 597 190 601C182 606 174 608 167 612C159 616 154 620 146 624C139 627 132 631 123 633C115 635 105 636 96 636C87 635 78 633 69 631C61 629 51 626 43 622C35 618 26 612 21 606C15 600 11 591 9 584C6 576 6 568 6 560C6 552 6 544 8 536C10 528 12 519 18 513C23 506 32 500 41 496C50 493 62 493 71 492C81 492 90 494 98 494C107 494 114 494 122 494C130 494 139 493 148 494C157 495 166 497 175 500C184 503 193 508 201 513C209 519 217 526 222 534C227 541 231 551 230 560ZM274 560C272 572 264 585 255 594C246 603 231 610 219 616C208 622 197 626 187 631C177 636 169 642 160 647C150 652 140 658 128 661C117 664 104 665 91 665C79 664 66 662 54 659C41 656 28 652 17 646C6 640 -6 633 -14 624C-22 615 -27 604 -30 593C-33 582 -33 571 -33 560C-32 549 -32 538 -29 527C-26 517 -23 505 -15 496C-8 487 4 478 16 473C28 468 44 468 57 467C70 467 82 469 94 469C105 470 115 469 126 469C138 469 150 467 162 468C175 469 188 472 201 476C213 481 225 487 236 495C247 503 258 513 264 524C271 535 275 548 274 560ZM317 560C315 575 305 591 294 603C282 615 262 623 248 631C233 639 219 642 206 649C194 655 185 663 172 669C160 676 148 684 133 689C119 693 102 695 86 695C70 695 53 691 37 687C21 683 5 678 -9 670C-24 663 -39 653 -49 642C-59 630 -66 616 -69 602C-73 588 -72 574 -71 560C-70 546 -69 532 -65 519C-61 505 -57 491 -47 479C-38 468 -24 457 -9 451C6 444 26 443 43 442C59 441 75 444 89 445C104 445 116 444 131 443C146 443 162 440 178 442C194 443 211 446 227 452C243 458 259 466 272 477C285 487 299 500 306 514C314 528 320 545 317 560Z"/></svg>
+    <div class="container reveal">
+      <p class="eyebrow">Zone d’intervention</p>
+      <h2 class="zone__title" id="zone-title">La Chaux-de-Fonds, les Montagnes neuchâteloises et <em>tout le canton.</em></h2>
+      <dl class="zone__facts">
+        <div><dt>Base</dt><dd>Les Bulles 55, <span class="nowrap">La Chaux-de-Fonds</span></dd></div>
+        <div><dt>Clientèle</dt><dd>Particuliers et professionnels</dd></div>
+        <div><dt>Joignable</dt><dd>Du lundi au samedi, dès 7h</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section horaires" id="horaires" aria-labelledby="horaires-title">
+    <div class="container horaires__grid">
+      <div class="reveal">
+        <p class="eyebrow">Horaires &amp; accès</p>
+        <h2 class="h2" id="horaires-title">Six jours sur sept, dès 7h.</h2>
+        <p class="status js-status" aria-live="polite"><span class="status__dot" aria-hidden="true"></span><span class="status__text">Du lundi au samedi, dès 7h</span></p>
+        <table class="hours">
+          <caption class="visually-hidden">Horaires d’ouverture</caption>
+          <tbody>
+            <tr data-day="lundi" data-hours="07:00–18:00"><th scope="row">Lundi</th><td>7h – 18h</td></tr>
+            <tr data-day="mardi" data-hours="07:00–18:00"><th scope="row">Mardi</th><td>7h – 18h</td></tr>
+            <tr data-day="mercredi" data-hours="07:00–18:00"><th scope="row">Mercredi</th><td>7h – 18h</td></tr>
+            <tr data-day="jeudi" data-hours="07:00–18:00"><th scope="row">Jeudi</th><td>7h – 18h</td></tr>
+            <tr data-day="vendredi" data-hours="07:00–18:00"><th scope="row">Vendredi</th><td>7h – 18h</td></tr>
+            <tr data-day="samedi" data-hours="07:00–17:00"><th scope="row">Samedi</th><td>7h – 17h</td></tr>
+            <tr data-day="dimanche" data-hours="Fermé" class="is-closed"><th scope="row">Dimanche</th><td>Fermé</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="access reveal">
+        <div class="map">
+          <div class="map__fallback">
+            <svg class="i" aria-hidden="true"><use href="#i-pin"/></svg>
+            <p>Les Bulles 55, <span class="nowrap">La Chaux-de-Fonds</span></p>
+          </div>
+          <iframe src="https://www.google.com/maps?q=Sauser%20espaces%20verts%2C%202300%20La%20Chaux-de-Fonds&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Carte : Sauser espaces verts, Les Bulles 55, La Chaux-de-Fonds" allowfullscreen></iframe>
+        </div>
+        <div class="access__card">
+          <p class="access__label">Adresse</p>
+          <address>Les Bulles 55<br>2300 <span class="nowrap">La Chaux-de-Fonds</span></address>
+          <div class="access__actions">
+            <a class="btn btn--primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Sauser%20espaces%20verts%2C%202300%20La%20Chaux-de-Fonds" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-nav"/></svg>Itinéraire</a>
+            <a class="btn btn--ghost" href="https://www.google.com/maps/place/?q=place_id:ChIJGbEkNrH7jUcRVBZp1VrEp_U" target="_blank" rel="noopener">Google Maps<svg class="i" aria-hidden="true"><use href="#i-out"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contact" aria-labelledby="contact-title">
+    <div class="container contact__grid">
+      <div class="reveal">
+        <p class="eyebrow">Contact &amp; devis</p>
+        <h2 class="h2" id="contact-title">Un terrain à reprendre, une haie à tailler&nbsp;?</h2>
+        <p class="lead">Le plus direct, c’est un appel. Pour écrire, un SMS ou un e-mail suffit&nbsp;: quelques photos du terrain aident à se faire une idée.</p>
+        <a class="contact__phone" href="tel:+41799239254">079 923 92 54</a>
+        <ul class="contact__list">
+          <li><a href="sms:+41799239254?&amp;body=Bonjour%2C%20je%20souhaiterais%20un%20devis%20pour%20des%20travaux%20de%20jardin.%20Pouvez-vous%20me%20recontacter%20%3F%20Merci."><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-sms"/></svg></span><span>Envoyer un SMS<small>079 923 92 54</small></span></a></li>
+          <li><a href="mailto:info@sauser-espacesverts.ch?subject=Demande%20de%20devis"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg></span><span>Écrire un e-mail<small>info@sauser-espacesverts.ch</small></span></a></li>
+          <li><a href="https://www.instagram.com/sauser.espaces.verts" target="_blank" rel="noopener"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></span><span>Instagram<small>@sauser.espaces.verts</small></span></a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61580633641396" target="_blank" rel="noopener"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-fb"/></svg></span><span>Facebook<small>Sauser espaces verts</small></span></a></li>
+        </ul>
+      </div>
+      <form class="devis reveal" id="devis-form" novalidate>
+        <h3>Préparer votre message</h3>
+        <p class="devis__intro">Rien n’est envoyé depuis ce site&nbsp;: le message s’ouvre, déjà rédigé, dans votre application SMS ou e-mail.</p>
+        <div class="field">
+          <label for="f-type">Type de travaux</label>
+          <select id="f-type" name="type">
+            <option>Création de jardin</option>
+            <option>Aménagement extérieur (terrasse, mur, accès)</option>
+            <option>Entretien de jardin</option>
+            <option>Taille, tonte, nettoyage saisonnier</option>
+            <option>Autre demande</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-lieu">Commune</label>
+          <input id="f-lieu" name="lieu" type="text" autocomplete="address-level2">
+        </div>
+        <div class="field">
+          <label for="f-msg">Votre projet <span class="field__hint">surface, accès, période souhaitée</span></label>
+          <textarea id="f-msg" name="message" rows="4"></textarea>
+        </div>
+        <div class="devis__actions">
+          <button class="btn btn--primary" type="submit" value="sms"><svg class="i" aria-hidden="true"><use href="#i-sms"/></svg>Par SMS</button>
+          <button class="btn btn--ghost" type="submit" value="mail"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Par e-mail</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <b>Sauser</b><span>espaces verts</span>
+        <p>Paysagiste à La Chaux-de-Fonds. Création, aménagement et entretien de jardins dans les Montagnes neuchâteloises et le canton de Neuchâtel.</p>
+      </div>
+      <div>
+        <p class="footer__label">Adresse</p>
+        <address>Les Bulles 55<br>2300 <span class="nowrap">La Chaux-de-Fonds</span></address>
+      </div>
+      <div>
+        <p class="footer__label">Contact</p>
+        <p><a href="tel:+41799239254">079 923 92 54</a><br><a href="mailto:info@sauser-espacesverts.ch">info@sauser-espacesverts.ch</a></p>
+        <p style="margin-top:8px">Lun – ven 7h – 18h<br>Sam 7h – 17h · Dim fermé</p>
+      </div>
+      <div>
+        <p class="footer__label">Suivre</p>
+        <div class="footer__social">
+          <a href="https://www.instagram.com/sauser.espaces.verts" target="_blank" rel="noopener" aria-label="Instagram de Sauser espaces verts"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61580633641396" target="_blank" rel="noopener" aria-label="Facebook de Sauser espaces verts"><svg class="i" aria-hidden="true"><use href="#i-fb"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span id="year"></span> Sauser espaces verts</p>
+      <p><a href="#top">Haut de page</a></p>
+    </div>
+  </div>
+</footer>
+
+<nav class="actionbar" aria-label="Actions rapides">
+  <a href="tel:+41799239254"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>Appeler</a>
+  <a href="sms:+41799239254?&amp;body=Bonjour%2C%20je%20souhaiterais%20un%20devis%20pour%20des%20travaux%20de%20jardin.%20Pouvez-vous%20me%20recontacter%20%3F%20Merci."><svg class="i" aria-hidden="true"><use href="#i-sms"/></svg>SMS</a>
+  <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Sauser%20espaces%20verts%2C%202300%20La%20Chaux-de-Fonds" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-nav"/></svg>Itinéraire</a>
+</nav>
+
+<dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
+  <figure><img alt=""><figcaption></figcaption></figure>
+  <button class="lb-btn lb-close" type="button" data-lb="close" aria-label="Fermer"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+  <button class="lb-btn lb-prev" type="button" data-lb="-1" aria-label="Photo précédente"><svg class="i" aria-hidden="true"><use href="#i-left"/></svg></button>
+  <button class="lb-btn lb-next" type="button" data-lb="1" aria-label="Photo suivante"><svg class="i" aria-hidden="true"><use href="#i-right"/></svg></button>
+</dialog>
+
+<script>
+(() => {
+  const d = document, root = d.documentElement;
+  root.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasIO = 'IntersectionObserver' in window;
+
+  const year = d.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
+
+  /* Header + menu */
+  const header = d.querySelector('.site-header');
+  const toggle = d.querySelector('.menu-toggle');
+  const nav = d.getElementById('site-nav');
+  const outside = [d.querySelector('main'), d.querySelector('.site-footer'), d.querySelector('.actionbar')];
+  const setMenu = (open) => {
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    root.classList.toggle('no-scroll', open);
+    outside.forEach(el => el && (el.inert = open));
+    if (open) nav.querySelector('a').focus();
+  };
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  nav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  d.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && header.classList.contains('is-open')) { setMenu(false); toggle.focus(); }
+  });
+  /* Smooth in-page anchors (scroll-margin-top keeps titles clear of the header) */
+  d.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented) return;
+    const id = a.getAttribute('href').slice(1), t = id && d.getElementById(id);
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    history.pushState(null, '', '#' + id);
+    if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+    t.focus({ preventScroll: true });
+  });
+  matchMedia('(min-width: 960px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
+  const onScroll = () => header.classList.toggle('is-scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* Hours: today + live status (Europe/Zurich time) */
+  const DAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+  const rows = [...d.querySelectorAll('.hours tr[data-day]')];
+  const parse = (s) => {
+    s = (s || '').toLowerCase().trim();
+    if (!s || /ferm|closed/.test(s)) return [];
+    const out = s.split(/,|;|\bet\b/).map(p => {
+      const m = p.match(/(\d{1,2})(?:[:h.](\d{2}))?\s*[–—-]\s*(\d{1,2})(?:[:h.](\d{2}))?/);
+      if (!m) return null;
+      const a = m[1] * 60 + +(m[2] || 0);
+      let b = m[3] * 60 + +(m[4] || 0);
+      if (b <= a) b += 1440;
+      return [a, b];
+    }).filter(Boolean);
+    if (!out.length && /24\s*h|24\/24|24 ?heures/.test(s)) return [[0, 1440]];
+    return out;
+  };
+  if (rows.length) {
+    const H = {};
+    rows.forEach(r => { H[r.dataset.day] = parse(r.dataset.hours); });
+    let day = -1, min = 0;
+    try {
+      const p = {};
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Zurich', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+        .formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+      day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday);
+      min = (+p.hour % 24) * 60 + +p.minute;
+    } catch (e) { /* fall back to device time */ }
+    if (day < 0 || isNaN(min)) { const n = new Date(); day = n.getDay(); min = n.getHours() * 60 + n.getMinutes(); }
+    const fmt = m => { m %= 1440; const h = Math.floor(m / 60), mm = m % 60; return h + 'h' + (mm ? String(mm).padStart(2, '0') : ''); };
+    const today = DAYS[day], yest = DAYS[(day + 6) % 7];
+    rows.forEach(r => { if (r.dataset.day === today) { r.classList.add('is-today'); r.setAttribute('aria-current', 'date'); } });
+    let until = null, allDay = false;
+    (H[today] || []).forEach(([a, b]) => { if (min >= a && min < b) { until = b; allDay = a === 0 && b === 1440; } });
+    (H[yest] || []).forEach(([, b]) => { if (b > 1440 && min < b - 1440) until = b - 1440; });
+    let text, state;
+    if (until !== null) {
+      state = 'open';
+      text = allDay ? 'Ouvert maintenant · 24h/24' : 'Ouvert maintenant · jusqu’à ' + fmt(until);
+    } else {
+      state = 'closed';
+      const later = (H[today] || []).find(([a]) => a > min);
+      if (later) text = 'Fermé · ouvre à ' + fmt(later[0]);
+      else {
+        text = 'Fermé';
+        for (let k = 1; k <= 7; k++) {
+          const name = DAYS[(day + k) % 7], r = H[name];
+          if (r && r.length) { text = 'Fermé · ouvre ' + (k === 1 ? 'demain' : name) + ' à ' + fmt(r[0][0]); break; }
+        }
+      }
+    }
+    d.querySelectorAll('.js-status').forEach(el => {
+      el.dataset.state = state;
+      el.querySelector('.status__text').textContent = text;
+    });
+  }
+
+  /* Reveal on scroll */
+  const reveals = d.querySelectorAll('.reveal');
+  if (hasIO && !reduce) {
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    }), { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+    reveals.forEach(el => io.observe(el));
+  } else reveals.forEach(el => el.classList.add('is-in'));
+
+  /* Count-up on the review count */
+  d.querySelectorAll('[data-count]').forEach(el => {
+    const end = +el.dataset.count;
+    if (reduce || !hasIO || !end) return;
+    const io = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      io.disconnect();
+      const t0 = performance.now(), dur = 1100;
+      const step = t => {
+        const k = Math.min(1, (t - t0) / dur);
+        el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.6 });
+    io.observe(el);
+  });
+
+  /* Review rail controls */
+  d.querySelectorAll('[data-rail]').forEach(wrap => {
+    const rail = wrap.querySelector('.rail');
+    const btns = wrap.querySelectorAll('[data-dir]');
+    const update = () => {
+      btns[0].disabled = rail.scrollLeft < 4;
+      btns[1].disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+    };
+    btns.forEach(b => b.addEventListener('click', () => {
+      const card = rail.querySelector('li');
+      const w = card ? card.getBoundingClientRect().width + 16 : 320;
+      rail.scrollBy({ left: w * +b.dataset.dir, behavior: reduce ? 'auto' : 'smooth' });
+    }));
+    rail.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  });
+
+  /* Gallery lightbox */
+  const lb = d.getElementById('lightbox');
+  const items = [...d.querySelectorAll('[data-lightbox]')];
+  if (lb && typeof lb.showModal === 'function' && items.length) {
+    const img = lb.querySelector('img'), cap = lb.querySelector('figcaption');
+    let i = 0, last = null;
+    const show = n => {
+      i = (n + items.length) % items.length;
+      const a = items[i], src = a.querySelector('img');
+      img.src = a.getAttribute('href');
+      img.alt = src.alt;
+      cap.textContent = a.dataset.caption || '';
+    };
+    items.forEach((a, n) => a.addEventListener('click', e => {
+      e.preventDefault(); last = a; show(n); lb.showModal(); root.classList.add('no-scroll');
+      lb.querySelector('.lb-close').focus();
+    }));
+    lb.addEventListener('click', e => {
+      if (e.target === lb) return lb.close();
+      const b = e.target.closest('[data-lb]');
+      if (!b) return;
+      if (b.dataset.lb === 'close') lb.close(); else show(i + +b.dataset.lb);
+    });
+    lb.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') show(i + 1);
+      if (e.key === 'ArrowLeft') show(i - 1);
+    });
+    lb.addEventListener('close', () => { root.classList.remove('no-scroll'); img.removeAttribute('src'); if (last) last.focus(); });
+  }
+
+  /* Contact form: builds a prefilled SMS or e-mail, nothing is posted */
+  const form = d.getElementById('devis-form');
+  if (form) form.addEventListener('submit', e => {
+    e.preventDefault();
+    const f = new FormData(form);
+    const type = f.get('type'), lieu = String(f.get('lieu') || '').trim(), msg = String(f.get('message') || '').trim();
+    const lines = ['Bonjour,', '', 'Je vous contacte pour : ' + type + '.'];
+    if (lieu) lines.push('Commune : ' + lieu + '.');
+    if (msg) lines.push('', msg);
+    lines.push('', 'Merci et belle journée.');
+    const body = encodeURIComponent(lines.join('\n'));
+    const via = e.submitter && e.submitter.value;
+    location.href = via === 'sms'
+      ? 'sms:+41799239254?&body=' + body
+      : 'mailto:info@sauser-espacesverts.ch?subject=' + encodeURIComponent('Demande de devis : ' + type) + '&body=' + body;
+  });
+})();
+</script>
+<!--sf:preview--><div style="padding:18px 16px;font:13px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;text-align:center;background:#0f0f10;color:#a3a3a8">Aperçu réalisé par Aymen Jallouli pour Sauser espaces verts : ce site n'est pas encore le site officiel de l'établissement.</div><!--/sf:preview-->
+<!--sf:track--><script>(function(){try{var q=new URLSearchParams(location.search),r=q.get('r')||sessionStorage.getItem('sf_r');if(!r)return;sessionStorage.setItem('sf_r',r);navigator.sendBeacon("https://track.aymenjallouli.dev/t"+'?r='+encodeURIComponent(r)+'&p='+encodeURIComponent(location.pathname));}catch(e){}})();</script><!--/sf:track-->
+</body>
+</html>
